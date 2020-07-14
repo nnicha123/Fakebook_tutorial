@@ -30,7 +30,7 @@ class Register extends Component {
                             </div> 
                             <div className="form-group">
                                 <label>Surname</label>
-                                <input type="text" placeholder="Surname"/>
+                                <input type="text" placeholder="Surname" value={this.state.surname} onChange={(e) => this.setState({surname:e.target.value})}/>
                             </div>
                         </div>
                         <div className="form-group">
