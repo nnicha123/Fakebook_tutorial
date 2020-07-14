@@ -10,7 +10,7 @@ class MyProfile extends Component {
         cover_pic: '',
         first_name: '',
         last_name: '',
-        searchFriends:''
+        searchFriends: ''
     }
     componentDidMount = () => {
         let username = LocalStorageService.getUsername()
@@ -72,19 +72,34 @@ class MyProfile extends Component {
                                 <li>Images</li>
                                 <li>Videos</li>
                             </ul>
-
                             <button onClick={this.logout}>Logout</button>
                         </div>
                     </div>
                 </div>
                 <div className="content">
                     <div className="contentPage">
-
+                        <div className="contentLeft">
+                            <div className="about"></div>
+                            <div className="about"></div>
+                            <div className="about"></div>
+                            <div className="about"></div>
+                        </div>
+                        <div className="contentRight">
+                            <div className="addPost">
+                                <div className="addPostTop">
+                                    <img src={this.state.profile_pic} className="userlogo" />
+                                    <input type="text" placeholder="What's on your mind" />
+                                </div>
+                                <div className="addPostBottom">
+                                    <input type="text" placeholder="Image url" />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         )
-        
+
     }
 }
 

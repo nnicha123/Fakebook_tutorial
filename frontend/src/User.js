@@ -43,18 +43,19 @@ class User extends Component {
             axios.get('http://localhost:8000/friends/requests/' + Number(this.state.friendId)).then(res => {
                 this.setState({ status: res.data.status })
             }).catch((err) => err)
+            window.location.reload()
         })
     }
     acceptFriend = () => {
         axios.put('http://localhost:8000/friends/requests/' + Number(this.state.friendId)).then((res) => {
             this.setState({ status: res.data.status })
-            axios.get('http://localhost:8000/friends/requests/' + Number(this.state.friendId))
+            window.location.reload()
         })
     }
     declineFriend = () => {
         axios.delete('http://localhost:8000/friends/requests/' + Number(this.state.friendId)).then((res) => {
             this.setState({ status: res.data.status })
-            axios.get('http://localhost:8000/friends/requests/' + Number(this.state.friendId))
+            window.location.reload()
         })
     }
     toProfile = () => {
@@ -119,7 +120,23 @@ class User extends Component {
                 </div>
                 <div className="content">
                     <div className="contentPage">
-
+                        <div className="contentLeft">
+                            <div className="about"></div>
+                            <div className="about"></div>
+                            <div className="about"></div>
+                            <div className="about"></div>
+                        </div>
+                        <div className="contentRight">
+                            <div className="addPost">
+                                <div className="addPostTop">
+                                    <img src={this.state.my_profile_pic} className="userlogo" />
+                                    <input type="text" placeholder="What's on your mind" />
+                                </div>
+                                <div className="addPostBottom">
+                                    <input type="text" placeholder="Image url" />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
