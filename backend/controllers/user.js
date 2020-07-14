@@ -86,6 +86,10 @@ const getSimpleProfile = async(req,res) => {
         res.status(400).send({message:'Cannot find user'})
     }
 }
+const getOtherUser = async(req,res) => {
+    const targetUser = await db.user.findOne({where:{username:req.params.username}})
+    res.status(200).send(targetUser)
+}
 module.exports = {
-    login, register, getProfile,getSimpleProfile
+    login, register, getProfile,getSimpleProfile,getOtherUser
 }

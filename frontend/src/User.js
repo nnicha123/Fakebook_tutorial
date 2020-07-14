@@ -1,31 +1,39 @@
 import React, { Component } from 'react'
+import axios from './config/axios'
 import './MyProfile.css'
 import { ShoppingFilled, HeartFilled, UserOutlined, HomeFilled, MessageFilled, PlusOutlined, BellFilled, DropboxOutlined } from '@ant-design/icons';
-import axios from './config/axios'
 import LocalStorageService from './services/localStorageService'
 
-class MyProfile extends Component {
+class User extends Component {
     state = {
         profile_pic: '',
         cover_pic: '',
         first_name: '',
         last_name: '',
-        searchFriends:''
+        my_profile_pic:'',
+        my_first_name:'',
+        friendSearch:''
+    }
+    findProfile = () => {
+        window.location.replace('/user/' + this.state.searchFriends)
     }
     componentDidMount = () => {
-        let username = LocalStorageService.getUsername()
-        axios.get('http://localhost:8000/users/profile/' + username).then(res => {
+        axios.get('http://localhost:8000/users/allusers/' + this.props.username).then(res => {
             const { profile_pic, cover_pic, first_name, last_name } = res.data
             this.setState({ profile_pic, cover_pic, first_name, last_name })
         })
+        let myUsername = LocalStorageService.getUsername()
+        axios.get('http://localhost:8000/users/profile/' + myUsername).then(res => {
+            console.log(res.data)
+            const { profile_pic,first_name } = res.data
+            this.setState({ my_profile_pic:profile_pic, my_first_name:first_name })
+        })
     }
-    logout = () => {
-        LocalStorageService.removeToken()
-        LocalStorageService.removeUsername()
-        window.location.replace('/')
+    addFriend = () => {
+
     }
-    findProfile = () => {
-        window.location.replace('user/' + this.state.searchFriends)
+    toProfile = () => {
+        window.location.replace('/myprofile')
     }
     render() {
         return (
@@ -43,9 +51,9 @@ class MyProfile extends Component {
                         <HomeFilled />
                     </div>
                     <div className="rightBar">
-                        <div className="userInfo">
-                            <img src={this.state.profile_pic} className="userlogo" />
-                            <div>{this.state.first_name}</div>
+                        <div className="userInfo" onClick={this.toProfile}>
+                            <img src={this.state.my_profile_pic} className="userlogo" />
+                            <div>{this.state.my_first_name}</div>
                         </div>
                         <div className="rightIcons">
                             <div><PlusOutlined /></div>
@@ -63,7 +71,7 @@ class MyProfile extends Component {
                 <div className="content">
                     <h1>{this.state.first_name} {this.state.last_name}</h1>
                     <div className="contentPage">
-                        <button onClick={this.logout}>Logout</button>
+                        <button onClick={this.addFriend}>Add Friend</button>
                     </div>
                 </div>
             </div>
@@ -71,4 +79,4 @@ class MyProfile extends Component {
     }
 }
 
-export default MyProfile
+export default User
