@@ -1,7 +1,7 @@
 module.exports = (sequelize,DataTypes) => {
     const Comment = sequelize.define('comment',{
         message:{
-            type:DataTypes.STRING,
+            type:DataTypes.STRING(255),
         },
     })
     Comment.associate = models => {
