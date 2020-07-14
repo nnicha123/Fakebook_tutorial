@@ -63,6 +63,12 @@ const deleteFriend = async (req, res) => {
     } else res.status(400).send({ message: 'Something went wrong' })
 }
 
+const countFriends = async(req,res) => {
+    const myId = Number(req.params.id)
+    const friends = await db.friend.findAll({where:{request_from_id: myId,status:'friend'}})
+    res.status(200).send(friends)
+}
+
 module.exports = {
-    sendRequestFriend, denyFriendRequest, acceptFriendRequest, deleteFriend,getRelationship
+    sendRequestFriend, denyFriendRequest, acceptFriendRequest, deleteFriend,getRelationship,countFriends
 }

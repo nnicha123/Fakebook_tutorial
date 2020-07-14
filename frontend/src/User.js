@@ -17,7 +17,8 @@ class User extends Component {
         status: 'Add Friend',
         friendId: 0,
         request_from: 0,
-        request_to: 0
+        request_to: 0,
+        friendNumber: 0
     }
     findProfile = () => {
         window.location.replace('/user/' + this.state.searchFriends)
@@ -31,9 +32,9 @@ class User extends Component {
         axios.get('http://localhost:8000/users/allusers/' + this.props.username).then(res => {
             const { profile_pic, cover_pic, first_name, last_name, id } = res.data
             this.setState({ profile_pic, cover_pic, first_name, last_name, friendId: id })
+            axios.get('http://localhost:8000/friends/requests/number/' + Number(this.state.friendId)).then(res => this.setState({ friendNumber: res.data.length }))
         }).then(() => {
             axios.get('http://localhost:8000/friends/requests/' + Number(this.state.friendId)).then(res => {
-                console.log(res.data)
                 this.setState({ status: res.data.status, request_from: res.data.request_from_id, request_to: res.data.request_to_id })
             }).catch((err) => err)
         })
@@ -102,7 +103,10 @@ class User extends Component {
                             <ul className="optionList">
                                 <li>Timeline</li>
                                 <li>About</li>
-                                <li>Friends</li>
+                                <li style={{display:'flex'}}>
+                                    <div style={{marginRight:'3px'}}>Friends</div>
+                                    <div className="numberOfFriends">{this.state.friendNumber}</div>
+                                </li>
                                 <li>Images</li>
                                 <li>Videos</li>
                             </ul>
