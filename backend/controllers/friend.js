@@ -6,14 +6,14 @@ const orLogic = (myId, targetId) => {
         [Op.or]: [{ request_from_id: myId, request_to_id: targetId }, { request_from_id: targetId, request_to_id: myId },],
     }
 }
-const getRelationship = async (req,res) => {
+const getRelationship = async (req, res) => {
     const targetId = Number(req.params.id)
     const myId = Number(req.user.id)
-    const relationship = await db.friend.findOne({where: orLogic(myId, targetId)})
-    if(relationship){
+    const relationship = await db.friend.findOne({ where: orLogic(myId, targetId) })
+    if (relationship) {
         res.status(200).send(relationship)
-    }else{
-        res.status(400).send({message:'Relationship not found'})
+    } else {
+        res.status(400).send({ message: 'Relationship not found' })
     }
 }
 const sendRequestFriend = async (req, res) => {
@@ -63,12 +63,12 @@ const deleteFriend = async (req, res) => {
     } else res.status(400).send({ message: 'Something went wrong' })
 }
 
-const countFriends = async(req,res) => {
+const countFriends = async (req, res) => {
     const myId = Number(req.params.id)
-    const friends = await db.friend.findAll({where:{request_from_id: myId,status:'friend'}})
+    const friends = await db.friend.findAll({ where: { [Op.and]: [{ status: 'friend' }, { [Op.or]: [{ request_from_id: myId }, { request_to_id: myId }] }] } })
     res.status(200).send(friends)
 }
 
 module.exports = {
-    sendRequestFriend, denyFriendRequest, acceptFriendRequest, deleteFriend,getRelationship,countFriends
+    sendRequestFriend, denyFriendRequest, acceptFriendRequest, deleteFriend, getRelationship, countFriends
 }

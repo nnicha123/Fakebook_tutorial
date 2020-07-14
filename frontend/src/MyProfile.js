@@ -10,13 +10,16 @@ class MyProfile extends Component {
         cover_pic: '',
         first_name: '',
         last_name: '',
-        searchFriends: ''
+        searchFriends: '',
+        id:'',
+        friendNumber:0
     }
     componentDidMount = () => {
         let username = LocalStorageService.getUsername()
         axios.get('http://localhost:8000/users/profile/' + username).then(res => {
-            const { profile_pic, cover_pic, first_name, last_name } = res.data
-            this.setState({ profile_pic, cover_pic, first_name, last_name })
+            const { profile_pic, cover_pic, first_name, last_name,id } = res.data
+            this.setState({ profile_pic, cover_pic, first_name, last_name,id })
+            axios.get('http://localhost:8000/friends/requests/number/' + Number(this.state.id)).then(res => this.setState({ friendNumber: res.data.length }))
         })
     }
     logout = () => {
@@ -68,7 +71,10 @@ class MyProfile extends Component {
                             <ul className="optionList">
                                 <li>Timeline</li>
                                 <li>About</li>
-                                <li>Friends</li>
+                                <li style={{display:'flex'}}>
+                                    <div style={{marginRight:'3px'}}>Friends</div>
+                                    <div className="numberOfFriends">{this.state.friendNumber}</div>
+                                </li>
                                 <li>Images</li>
                                 <li>Videos</li>
                             </ul>
