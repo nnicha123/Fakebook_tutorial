@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import './Form.css'
 import axios from 'axios'
 import Register from './Register'
-
+import LocalStorageService from './services/localStorageService'
 
 class Login extends Component {
     state = {
@@ -13,6 +13,8 @@ class Login extends Component {
         e.preventDefault();
         axios.post('http://localhost:8000/users/login', this.state).then(res => {
             console.log(res.data)
+            LocalStorageService.setToken(res.data.token)
+            LocalStorageService.setUsername(res.data.username)
             window.location.replace('/myprofile')
         })
             .catch(err => console.log(err))

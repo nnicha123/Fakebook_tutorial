@@ -34,7 +34,7 @@ const login = async (req, res) => {
                 name: user.name
             }
             const token = jwt.sign(payload, process.env.SECRET, { expiresIn: 3600 })
-            res.status(200).send({ token, message: "User found & logged in" })
+            res.status(200).send({ token, message: "User found & logged in", username })
         }
     }
 }
@@ -77,7 +77,15 @@ const getProfile = async (req, res) => {
         }
     }
 }
-
+const getSimpleProfile = async(req,res) => {
+    const targetUsername = req.params.username
+    const targetUser = await db.user.findOne({where:{username:targetUsername}})
+    if(targetUser){
+        res.status(200).send(targetUser)
+    }else{
+        res.status(400).send({message:'Cannot find user'})
+    }
+}
 module.exports = {
-    login, register, getProfile
+    login, register, getProfile,getSimpleProfile
 }
