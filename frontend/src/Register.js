@@ -7,11 +7,12 @@ class Register extends Component {
         username: '',
         password: '',
         name: '',
+        surname:'',
         profile_pic: ''
     }
     submit = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:8000/users/register',this.state).then(res => this.setState({name:'',username:'',password:''}))
+        axios.post('http://localhost:8000/users/register',this.state).then(res => this.setState({name:'',username:'',password:'',surname:''}))
         .catch(err => console.log(err))
     }
     render() {
