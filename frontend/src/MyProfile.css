@@ -2,7 +2,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0 30px;
+    /* padding: 0 30px; */
+    background: rgb(230, 228, 228);
 }
 .logoBackground{
     width: 40px;
@@ -26,6 +27,7 @@ nav{
     padding: 0 30px;
     /* background-color: rgb(197, 196, 196); */
     box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+    background: white;
 }
 .logoSearch{
     display: flex;
@@ -79,14 +81,15 @@ nav{
 .centerIcons > * {
     padding: 0 40px;
 }
-.profileWrapper header{
+.profileWrapper header, .profileWrapper .coverImg{
     height: 300px;
     width: 60%;
     overflow: hidden;
     position: relative;
     border-radius: 20px;
 }
-.profileWrapper header .coverImage{
+
+.profileWrapper header .coverImage,.profileWrapper .coverImg .coverImage{
     width: 100%;
     height: 120%;
 }
@@ -102,4 +105,47 @@ nav{
 .contentPage{
     background-color: white;
     height: 100vh;
+}
+.outerHead{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+    background: white;
+}
+.head{
+    height: 440px;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.head .coverImg{
+    overflow: hidden;
+    width: 100%;
+}
+.headerOptions{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    border-top: 1px solid rgb(196, 196, 196);
+    
+}
+.headerOptions::before{
+    content: "";
+    width: 100px;
+    height: 100px;
+    color: black;
+    position: absolute;
+    top: 0;
+    z-index: 100;
+}
+.optionList{
+    display: flex;
+    list-style: none;
+}
+.optionList li{
+    padding: 10px;
 }

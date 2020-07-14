@@ -10,14 +10,14 @@ class User extends Component {
         cover_pic: '',
         first_name: '',
         last_name: '',
-        my_id:'',
+        my_id: '',
         my_profile_pic: '',
         my_first_name: '',
         friendSearch: '',
         status: 'Add Friend',
         friendId: 0,
-        request_from:0,
-        request_to:0
+        request_from: 0,
+        request_to: 0
     }
     findProfile = () => {
         window.location.replace('/user/' + this.state.searchFriends)
@@ -25,8 +25,8 @@ class User extends Component {
     componentDidMount = () => {
         let myUsername = LocalStorageService.getUsername()
         axios.get('http://localhost:8000/users/profile/' + myUsername).then(res => {
-            const { profile_pic, first_name,id } = res.data
-            this.setState({ my_profile_pic: profile_pic, my_first_name: first_name,my_id:id })
+            const { profile_pic, first_name, id } = res.data
+            this.setState({ my_profile_pic: profile_pic, my_first_name: first_name, my_id: id })
         })
         axios.get('http://localhost:8000/users/allusers/' + this.props.username).then(res => {
             const { profile_pic, cover_pic, first_name, last_name, id } = res.data
@@ -34,7 +34,7 @@ class User extends Component {
         }).then(() => {
             axios.get('http://localhost:8000/friends/requests/' + Number(this.state.friendId)).then(res => {
                 console.log(res.data)
-                this.setState({ status: res.data.status,request_from:res.data.request_from_id, request_to:res.data.request_to_id})
+                this.setState({ status: res.data.status, request_from: res.data.request_from_id, request_to: res.data.request_to_id })
             }).catch((err) => err)
         })
     }
@@ -47,13 +47,13 @@ class User extends Component {
     }
     acceptFriend = () => {
         axios.put('http://localhost:8000/friends/requests/' + Number(this.state.friendId)).then((res) => {
-            this.setState({status:res.data.status})
+            this.setState({ status: res.data.status })
             axios.get('http://localhost:8000/friends/requests/' + Number(this.state.friendId))
         })
     }
     declineFriend = () => {
         axios.delete('http://localhost:8000/friends/requests/' + Number(this.state.friendId)).then((res) => {
-            this.setState({status:res.data.status})
+            this.setState({ status: res.data.status })
             axios.get('http://localhost:8000/friends/requests/' + Number(this.state.friendId))
         })
     }
@@ -88,22 +88,38 @@ class User extends Component {
                         </div>
                     </div>
                 </nav>
-                <header>
-                    <img src={this.state.cover_pic} className="coverImage" />
+                <div className="outerHead">
+                    <div className="head">
+                        <div className="coverImg" >
+                            <img src={this.state.cover_pic} className="coverImage" />
+                        </div>
+                        <img src={this.state.profile_pic} className="profileImage" />
+                        <div className="headerBottom">
+                            <h1>{this.state.first_name} {this.state.last_name}</h1>
+                        </div>
+                        <div className="headerOptions">
+                            <ul className="optionList">
+                                <li>Timeline</li>
+                                <li>About</li>
+                                <li>Friends</li>
+                                <li>Images</li>
+                                <li>Videos</li>
+                            </ul>
 
-                </header>
-                <img src={this.state.profile_pic} className="profileImage" />
+                            {this.state.status === 'Add Friend' && <button onClick={this.addFriend}>{this.state.status}</button>}
+                            {this.state.status === 'pending' &&
+                                <div>
+                                    {this.state.request_to === this.state.my_id && <button onClick={this.acceptFriend}>Accept Friend</button>}
+                                    {this.state.request_to === this.state.my_id && <button onClick={this.declineFriend}>Decline Friend</button>}
+                                    {this.state.request_from === this.state.my_id && <button>Requested</button>}
+                                </div>}
+                            {this.state.status === 'friend' && <button>Friends</button>}
+                        </div>
+                    </div>
+                </div>
                 <div className="content">
-                    <h1>{this.state.first_name} {this.state.last_name}</h1>
                     <div className="contentPage">
-                        {this.state.status === 'Add Friend' && <button onClick={this.addFriend}>{this.state.status}</button>}
-                        {this.state.status === 'pending' &&
-                            <div>
-                                {this.state.request_to === this.state.my_id && <button onClick={this.acceptFriend}>Accept Friend</button>}
-                                {this.state.request_to === this.state.my_id && <button onClick={this.declineFriend}>Decline Friend</button>}
-                                {this.state.request_from === this.state.my_id && <button>Requested</button>}
-                            </div>}
-                        {this.state.status === 'friend' && <button>Friends</button>}
+
                     </div>
                 </div>
             </div>
