@@ -13,6 +13,7 @@ class Login extends Component {
         e.preventDefault();
         axios.post('http://localhost:8000/users/login', this.state).then(res => {
             console.log(res.data)
+            window.location.replace('/myprofile')
         })
             .catch(err => console.log(err))
 

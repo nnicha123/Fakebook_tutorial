@@ -6,13 +6,13 @@ class Register extends Component {
     state = {
         username: '',
         password: '',
-        name: '',
-        surname:'',
+        first_name: '',
+        last_name:'',
         profile_pic: ''
     }
     submit = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:8000/users/register',this.state).then(res => this.setState({name:'',username:'',password:'',surname:''}))
+        axios.post('http://localhost:8000/users/register',this.state).then(res => this.setState({first_name:'',username:'',password:'',last_name:''}))
         .catch(err => console.log(err))
     }
     render() {
@@ -26,11 +26,11 @@ class Register extends Component {
                         <div class="nameGroup">
                             <div className="form-group">
                                 <label>First name</label>
-                                <input type="text" placeholder="First name" value={this.state.name} onChange={(e) => this.setState({name:e.target.value})}/>
+                                <input type="text" placeholder="First name" value={this.state.first_name} onChange={(e) => this.setState({first_name:e.target.value})}/>
                             </div> 
                             <div className="form-group">
                                 <label>Surname</label>
-                                <input type="text" placeholder="Surname" value={this.state.surname} onChange={(e) => this.setState({surname:e.target.value})}/>
+                                <input type="text" placeholder="Surname" value={this.state.last_name} onChange={(e) => this.setState({last_name:e.target.value})}/>
                             </div>
                         </div>
                         <div className="form-group">

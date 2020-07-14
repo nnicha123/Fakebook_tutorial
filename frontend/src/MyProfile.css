@@ -52,6 +52,11 @@ nav{
     padding: 5px;
     border-radius: 15px;
 }
+.userlogo{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
 .rightIcons{
     display: flex;
 }

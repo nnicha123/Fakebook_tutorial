@@ -5,14 +5,14 @@ const { Op } = require("sequelize");
 
 
 const register = async (req, res) => {
-    const { username, password, profile_pic, name } = req.body
+    const { username, password, profile_pic,cover_pic, first_name,last_name } = req.body
     const user = await db.user.findOne({ where: { username } }) //short form (username:username)
     if (user) {
         res.status(400).send({ message: 'Username taken' })
     } else {
         const salt = bcrypt.genSaltSync(Number(process.env.SALT_ROUNDS))
         const hashedPassword = bcrypt.hashSync(password, salt)
-        await db.user.create({ username, password: hashedPassword, name, profile_pic })
+        await db.user.create({ username, password: hashedPassword, first_name,last_name, profile_pic,cover_pic })
         res.status(200).send({ message: "User created" })
     }
 }

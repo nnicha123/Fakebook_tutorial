@@ -8,9 +8,15 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
         },
         profile_pic: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING(400)
         },
-        name: {
+        cover_pic:{
+            type:DataTypes.STRING(400)
+        },
+        first_name: {
+            type: DataTypes.STRING(100)
+        },
+        last_name: {
             type: DataTypes.STRING(100)
         }
     })

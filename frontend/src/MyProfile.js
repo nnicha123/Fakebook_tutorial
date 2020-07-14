@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
 import './MyProfile.css'
 import { ShoppingFilled, HeartFilled, UserOutlined, HomeFilled, MessageFilled, PlusOutlined, BellFilled, DropboxOutlined } from '@ant-design/icons';
+import axios from 'axios'
 
 class MyProfile extends Component {
+    componentDidMount = () => {
+        axios.get('http://localhost:8000/users/profile/1').then(res => console.log(res.data))
+    }
     render() {
         return (
             <div className="profileWrapper">
@@ -19,7 +23,7 @@ class MyProfile extends Component {
                     </div>
                     <div className="rightBar">
                         <div className="userInfo">
-                            <img src="https://scontent.fbkk22-1.fna.fbcdn.net/v/t1.0-1/s320x320/84512591_791450424693484_2619608263020249088_o.jpg?_nc_cat=101&_nc_sid=7206a8&_nc_eui2=AeFYCOS-OnwlE9IDmMDG88FhHQlallIk39gdCVqWUiTf2Pa6p1qIzQnO8oU3_7eI-JtOBzrLafWYDPx3sLsQBpL8&_nc_ohc=9VfiMFPuMZQAX_rVL7_&_nc_ht=scontent.fbkk22-1.fna&_nc_tp=7&oh=44682cf53ad88810a1abc28aa9bf4e9b&oe=5F33C886" style={{ width: '30px', height: '30px', borderRadius: '50%' }} />
+                            <img src="https://scontent.fbkk22-1.fna.fbcdn.net/v/t1.0-1/s320x320/84512591_791450424693484_2619608263020249088_o.jpg?_nc_cat=101&_nc_sid=7206a8&_nc_eui2=AeFYCOS-OnwlE9IDmMDG88FhHQlallIk39gdCVqWUiTf2Pa6p1qIzQnO8oU3_7eI-JtOBzrLafWYDPx3sLsQBpL8&_nc_ohc=9VfiMFPuMZQAX_rVL7_&_nc_ht=scontent.fbkk22-1.fna&_nc_tp=7&oh=44682cf53ad88810a1abc28aa9bf4e9b&oe=5F33C886"className="userlogo"/>
                             <div>Nicha</div>
                         </div>
                         <div className="rightIcons">
