@@ -10,27 +10,46 @@ class User extends Component {
         cover_pic: '',
         first_name: '',
         last_name: '',
-        my_profile_pic:'',
-        my_first_name:'',
-        friendSearch:''
+        my_id:'',
+        my_profile_pic: '',
+        my_first_name: '',
+        friendSearch: '',
+        status: 'Add Friend',
+        friendId: 0,
+        request_from:0,
+        request_to:0
     }
     findProfile = () => {
         window.location.replace('/user/' + this.state.searchFriends)
     }
     componentDidMount = () => {
-        axios.get('http://localhost:8000/users/allusers/' + this.props.username).then(res => {
-            const { profile_pic, cover_pic, first_name, last_name } = res.data
-            this.setState({ profile_pic, cover_pic, first_name, last_name })
-        })
         let myUsername = LocalStorageService.getUsername()
         axios.get('http://localhost:8000/users/profile/' + myUsername).then(res => {
-            console.log(res.data)
-            const { profile_pic,first_name } = res.data
-            this.setState({ my_profile_pic:profile_pic, my_first_name:first_name })
+            const { profile_pic, first_name,id } = res.data
+            this.setState({ my_profile_pic: profile_pic, my_first_name: first_name,my_id:id })
+        })
+        axios.get('http://localhost:8000/users/allusers/' + this.props.username).then(res => {
+            const { profile_pic, cover_pic, first_name, last_name, id } = res.data
+            this.setState({ profile_pic, cover_pic, first_name, last_name, friendId: id })
+        }).then(() => {
+            axios.get('http://localhost:8000/friends/requests/' + Number(this.state.friendId)).then(res => {
+                console.log(res.data)
+                this.setState({ status: res.data.status,request_from:res.data.request_from_id, request_to:res.data.request_to_id})
+            }).catch((err) => err)
         })
     }
     addFriend = () => {
-
+        axios.post('http://localhost:8000/friends/requests/' + Number(this.state.friendId)).then(() => {
+            axios.get('http://localhost:8000/friends/requests/' + Number(this.state.friendId)).then(res => {
+                this.setState({ status: res.data.status })
+            }).catch((err) => err)
+        })
+    }
+    acceptFriend = () => {
+        axios.put('http://localhost:8000/friends/requests/' + Number(this.state.friendId)).then((res) => {
+            this.setState({status:res.data.status})
+            axios.get('http://localhost:8000/friends/requests/' + Number(this.state.friendId))
+        })
     }
     toProfile = () => {
         window.location.replace('/myprofile')
@@ -41,8 +60,8 @@ class User extends Component {
                 <nav>
                     <div className="logoSearch">
                         <div className="logoBackground">f</div>
-                        <input type="text" placeholder="Search Friends" onChange={(e) => this.setState({searchFriends:e.target.value})} />
-                        <button style={{border:'none',padding:'10px'}} onClick={this.findProfile}>Ok</button>
+                        <input type="text" placeholder="Search Friends" onChange={(e) => this.setState({ searchFriends: e.target.value })} />
+                        <button style={{ border: 'none', padding: '10px' }} onClick={this.findProfile}>Ok</button>
                     </div>
                     <div className="centerIcons">
                         <HeartFilled />
@@ -71,7 +90,13 @@ class User extends Component {
                 <div className="content">
                     <h1>{this.state.first_name} {this.state.last_name}</h1>
                     <div className="contentPage">
-                        <button onClick={this.addFriend}>Add Friend</button>
+                        {this.state.status === 'Add Friend' && <button onClick={this.addFriend}>{this.state.status}</button>}
+                        {this.state.status === 'pending' &&
+                            <div>
+                                {this.state.request_to === this.state.my_id && <button onClick={this.acceptFriend}>Accept Friend</button>}
+                                {this.state.request_from === this.state.my_id && <button>Requested</button>}
+                            </div>}
+                        {this.state.status === 'friend' && <button>Friends</button>}
                     </div>
                 </div>
             </div>

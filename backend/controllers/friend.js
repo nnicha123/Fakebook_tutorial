@@ -6,6 +6,16 @@ const orLogic = (myId, targetId) => {
         [Op.or]: [{ request_from_id: myId, request_to_id: targetId }, { request_from_id: targetId, request_to_id: myId },],
     }
 }
+const getRelationship = async (req,res) => {
+    const targetId = Number(req.params.id)
+    const myId = Number(req.user.id)
+    const relationship = await db.friend.findOne({where: orLogic(myId, targetId)})
+    if(relationship){
+        res.status(200).send(relationship)
+    }else{
+        res.status(400).send({message:'Relationship not found'})
+    }
+}
 const sendRequestFriend = async (req, res) => {
     const targetId = Number(req.params.id)
     const myId = Number(req.user.id)
@@ -54,5 +64,5 @@ const deleteFriend = async (req, res) => {
 }
 
 module.exports = {
-    sendRequestFriend, denyFriendRequest, acceptFriendRequest, deleteFriend
+    sendRequestFriend, denyFriendRequest, acceptFriendRequest, deleteFriend,getRelationship
 }
