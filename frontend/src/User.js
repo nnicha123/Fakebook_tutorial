@@ -51,6 +51,12 @@ class User extends Component {
             axios.get('http://localhost:8000/friends/requests/' + Number(this.state.friendId))
         })
     }
+    declineFriend = () => {
+        axios.delete('http://localhost:8000/friends/requests/' + Number(this.state.friendId)).then((res) => {
+            this.setState({status:res.data.status})
+            axios.get('http://localhost:8000/friends/requests/' + Number(this.state.friendId))
+        })
+    }
     toProfile = () => {
         window.location.replace('/myprofile')
     }
@@ -94,6 +100,7 @@ class User extends Component {
                         {this.state.status === 'pending' &&
                             <div>
                                 {this.state.request_to === this.state.my_id && <button onClick={this.acceptFriend}>Accept Friend</button>}
+                                {this.state.request_to === this.state.my_id && <button onClick={this.declineFriend}>Decline Friend</button>}
                                 {this.state.request_from === this.state.my_id && <button>Requested</button>}
                             </div>}
                         {this.state.status === 'friend' && <button>Friends</button>}
