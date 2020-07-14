@@ -33,8 +33,8 @@ class MyProfile extends Component {
                 <nav>
                     <div className="logoSearch">
                         <div className="logoBackground">f</div>
-                        <input type="text" placeholder="Search Friends" onChange={(e) => this.setState({searchFriends:e.target.value})} />
-                        <button style={{border:'none',padding:'10px'}} onClick={this.findProfile}>Ok</button>
+                        <input type="text" placeholder="Search Friends" onChange={(e) => this.setState({ searchFriends: e.target.value })} />
+                        <button style={{ border: 'none', padding: '10px' }} onClick={this.findProfile}>Ok</button>
                     </div>
                     <div className="centerIcons">
                         <HeartFilled />
@@ -55,19 +55,36 @@ class MyProfile extends Component {
                         </div>
                     </div>
                 </nav>
-                <header>
-                    <img src={this.state.cover_pic} className="coverImage" />
+                <div className="outerHead">
+                    <div className="head">
+                        <div className="coverImg" >
+                            <img src={this.state.cover_pic} className="coverImage" />
+                        </div>
+                        <img src={this.state.profile_pic} className="profileImage" />
+                        <div className="headerBottom">
+                            <h1>{this.state.first_name} {this.state.last_name}</h1>
+                        </div>
+                        <div className="headerOptions">
+                            <ul className="optionList">
+                                <li>Timeline</li>
+                                <li>About</li>
+                                <li>Friends</li>
+                                <li>Images</li>
+                                <li>Videos</li>
+                            </ul>
 
-                </header>
-                <img src={this.state.profile_pic} className="profileImage" />
+                            <button onClick={this.logout}>Logout</button>
+                        </div>
+                    </div>
+                </div>
                 <div className="content">
-                    <h1>{this.state.first_name} {this.state.last_name}</h1>
                     <div className="contentPage">
-                        <button onClick={this.logout}>Logout</button>
+
                     </div>
                 </div>
             </div>
         )
+        
     }
 }
 
