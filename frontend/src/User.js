@@ -18,7 +18,8 @@ class User extends Component {
         friendId: 0,
         request_from: 0,
         request_to: 0,
-        friendNumber: 0
+        friendNumber: 0,
+        friendInfo: []
     }
     findProfile = () => {
         window.location.replace('/user/' + this.state.searchFriends)
@@ -32,12 +33,28 @@ class User extends Component {
         axios.get('http://localhost:8000/users/allusers/' + this.props.username).then(res => {
             const { profile_pic, cover_pic, first_name, last_name, id } = res.data
             this.setState({ profile_pic, cover_pic, first_name, last_name, friendId: id })
-            axios.get('http://localhost:8000/friends/requests/number/' + Number(this.state.friendId)).then(res => this.setState({ friendNumber: res.data.length }))
-        }).then(() => {
-            axios.get('http://localhost:8000/friends/requests/' + Number(this.state.friendId)).then(res => {
-                this.setState({ status: res.data.status, request_from: res.data.request_from_id, request_to: res.data.request_to_id })
-            }).catch((err) => err)
+            axios.get('http://localhost:8000/friends/requests/number/' + Number(this.state.friendId)).then(res => {
+                let storeId = []
+                for (let i = 0; i < res.data.length; i++) {
+                    storeId.push(res.data[i].request_from_id, res.data[i].request_to_id)
+
+                }
+                storeId = storeId.filter(el => el !== id)
+                let info = []
+                for (let i = 0; i < storeId.length; i++) {
+                    axios.get('http://localhost:8000/users/profileId/' + storeId[i]).then(res => {
+                        this.setState({ friendInfo: [...this.state.friendInfo, res.data.targetProfile] })
+                    })
+                }
+                console.log(info)
+                this.setState({ friendNumber: res.data.length, friendInfo: info })
+            })
         })
+            .then(() => {
+                axios.get('http://localhost:8000/friends/requests/' + Number(this.state.friendId)).then(res => {
+                    this.setState({ status: res.data.status, request_from: res.data.request_from_id, request_to: res.data.request_to_id })
+                }).catch((err) => err)
+            })
     }
     addFriend = () => {
         axios.post('http://localhost:8000/friends/requests/' + Number(this.state.friendId)).then(() => {
@@ -61,6 +78,9 @@ class User extends Component {
     }
     toProfile = () => {
         window.location.replace('/myprofile')
+    }
+    goToProfile = (username) => {
+        window.location.replace('/user/'+username)
     }
     render() {
         return (
@@ -103,8 +123,8 @@ class User extends Component {
                             <ul className="optionList">
                                 <li>Timeline</li>
                                 <li>About</li>
-                                <li style={{display:'flex'}}>
-                                    <div style={{marginRight:'3px'}}>Friends</div>
+                                <li style={{ display: 'flex' }}>
+                                    <div style={{ marginRight: '3px' }}>Friends</div>
                                     <div className="numberOfFriends">{this.state.friendNumber}</div>
                                 </li>
                                 <li>Images</li>
@@ -125,8 +145,20 @@ class User extends Component {
                 <div className="content">
                     <div className="contentPage">
                         <div className="contentLeft">
-                            <div className="about"></div>
-                            <div className="about"></div>
+                            <div className="about">
+                                <h4>About</h4>
+                            </div>
+                            <div className="about">
+                                <h4>Friends</h4>
+                                <div className="friendDiv">
+                                    {this.state.friendInfo.map((el, indx) => {
+                                        return <div key={indx + 1} onClick={() => this.goToProfile(el.username)}>
+                                            <img src={el.profile_pic} className="friendsPics" />
+                                            <p style={{margin:0}}>{el.first_name}</p>
+                                        </div>
+                                    })}
+                                </div>
+                            </div>
                             <div className="about"></div>
                             <div className="about"></div>
                         </div>

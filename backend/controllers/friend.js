@@ -69,6 +69,7 @@ const countFriends = async (req, res) => {
     res.status(200).send(friends)
 }
 
+
 module.exports = {
     sendRequestFriend, denyFriendRequest, acceptFriendRequest, deleteFriend, getRelationship, countFriends
 }

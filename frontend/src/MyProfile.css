@@ -120,6 +120,7 @@ nav{
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 1px 1px rgba(0,0,0,0.3);
+    padding: 10px;
 }
 .contentRight{
     display: grid;
@@ -191,4 +192,12 @@ nav{
     border-radius: 50%;
     justify-content: center;
     align-items: center;
+}
+.friendDiv{
+    display: grid;
+    grid-template-columns: repeat(3,100px);
+    grid-column-gap: 10px;
+}
+.friendDiv .friendsPics{
+    width: 100%;
 }

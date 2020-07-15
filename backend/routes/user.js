@@ -7,7 +7,7 @@ const authentication = passport.authenticate("jwt", { session: false })
 
 router.post('/register', userController.register)
 router.post('/login', userController.login)
-// router.get('/profile/:id', authentication, userController.getProfile)
+router.get('/profileId/:id', authentication, userController.getProfile)
 router.get('/profile/:username',authentication,userController.getSimpleProfile)
 router.get('/allusers/:username',userController.getOtherUser)
 
