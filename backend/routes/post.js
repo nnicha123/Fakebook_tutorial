@@ -5,6 +5,7 @@ const passport = require('passport')
 
 const authentication = passport.authenticate("jwt",{session:false})
 
+// router.get('/:id/:user_id')
 router.post('/',authentication,postController.createPost)
 router.get('/',authentication,postController.getAllPosts)
 router.put('/:id',authentication,postController.editPost)

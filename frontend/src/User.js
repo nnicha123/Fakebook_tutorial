@@ -13,13 +13,20 @@ class User extends Component {
         my_id: '',
         my_profile_pic: '',
         my_first_name: '',
+        my_last_name: '',
         friendSearch: '',
         status: 'Add Friend',
         friendId: 0,
         request_from: 0,
         request_to: 0,
         friendNumber: 0,
-        friendInfo: []
+        friendInfo: [],
+        postText: '',
+        postImage: '',
+        // postInfo: {}
+        posts: [],
+        posters: [],
+        postInfo: []
     }
     findProfile = () => {
         window.location.replace('/user/' + this.state.searchFriends)
@@ -27,9 +34,22 @@ class User extends Component {
     componentDidMount = () => {
         let myUsername = LocalStorageService.getUsername()
         axios.get('http://localhost:8000/users/profile/' + myUsername).then(res => {
-            const { profile_pic, first_name, id } = res.data
-            this.setState({ my_profile_pic: profile_pic, my_first_name: first_name, my_id: id })
+            const { profile_pic, first_name, last_name, id } = res.data
+            // console.log(res.data)
+            this.setState({ my_profile_pic: profile_pic, my_first_name: first_name, my_last_name: last_name, my_id: id })
         })
+        axios.get('http://localhost:8000/posts').then(res => {
+            // console.log(res.data)
+            this.setState({ posts: res.data })
+            // console.log(res.data[0].user_id)
+            for (let i = 0; i < res.data.length; i++) {
+                axios.get('http://localhost:8000/users/profileId/' + res.data[i].user_id).then(res => {
+                    console.log(res.data.targetProfile)
+                    this.setState({ posters: [...this.state.posters, res.data.targetProfile] })
+                })
+            }
+        })
+
         axios.get('http://localhost:8000/users/allusers/' + this.props.username).then(res => {
             const { profile_pic, cover_pic, first_name, last_name, id } = res.data
             this.setState({ profile_pic, cover_pic, first_name, last_name, friendId: id })
@@ -46,7 +66,7 @@ class User extends Component {
                         this.setState({ friendInfo: [...this.state.friendInfo, res.data.targetProfile] })
                     })
                 }
-                console.log(info)
+                // console.log(info)
                 this.setState({ friendNumber: res.data.length, friendInfo: info })
             })
         })
@@ -55,6 +75,16 @@ class User extends Component {
                     this.setState({ status: res.data.status, request_from: res.data.request_from_id, request_to: res.data.request_to_id })
                 }).catch((err) => err)
             })
+    }
+    getPosts = () => {
+        let newArr = this.state.posts
+        for (let i = 0; i < this.state.posts.length; i++) {
+            newArr[i].profile_pic = this.state.posters[i].profile_pic
+            newArr[i].first_name = this.state.posters[i].first_name
+            newArr[i].last_name = this.state.posters[i].last_name
+        }
+        console.log(newArr)
+        this.setState({ postInfo: newArr })
     }
     addFriend = () => {
         axios.post('http://localhost:8000/friends/requests/' + Number(this.state.friendId)).then(() => {
@@ -80,36 +110,42 @@ class User extends Component {
         window.location.replace('/myprofile')
     }
     goToProfile = (username) => {
-        window.location.replace('/user/'+username)
+        window.location.replace('/user/' + username)
+    }
+    submitPost = () => {
+        const post = { text: this.state.postText, picture: this.state.postImage }
+        axios.post('http://localhost:8000/posts/', post)
     }
     render() {
         return (
             <div className="profileWrapper">
-                <nav>
-                    <div className="logoSearch">
-                        <div className="logoBackground">f</div>
-                        <input type="text" placeholder="Search Friends" onChange={(e) => this.setState({ searchFriends: e.target.value })} />
-                        <button style={{ border: 'none', padding: '10px' }} onClick={this.findProfile}>Ok</button>
-                    </div>
-                    <div className="centerIcons">
-                        <HeartFilled />
-                        <ShoppingFilled />
-                        <UserOutlined />
-                        <HomeFilled />
-                    </div>
-                    <div className="rightBar">
-                        <div className="userInfo" onClick={this.toProfile}>
-                            <img src={this.state.my_profile_pic} className="userlogo" />
-                            <div>{this.state.my_first_name}</div>
+                <div className="navWrapper">
+                    <nav>
+                        <div className="logoSearch">
+                            <div className="logoBackground">f</div>
+                            <input type="text" placeholder="Search Friends" onChange={(e) => this.setState({ searchFriends: e.target.value })} />
+                            <button style={{ border: 'none', padding: '10px' }} onClick={this.findProfile}>Ok</button>
                         </div>
-                        <div className="rightIcons">
-                            <div><PlusOutlined /></div>
-                            <div><MessageFilled /></div>
-                            <div><BellFilled /></div>
-                            <div><DropboxOutlined /></div>
+                        <div className="centerIcons">
+                            <HeartFilled />
+                            <ShoppingFilled />
+                            <UserOutlined />
+                            <HomeFilled />
                         </div>
-                    </div>
-                </nav>
+                        <div className="rightBar">
+                            <div className="userInfo" onClick={this.toProfile}>
+                                <img src={this.state.my_profile_pic} className="userlogo" />
+                                <div>{this.state.my_first_name}</div>
+                            </div>
+                            <div className="rightIcons">
+                                <div><PlusOutlined /></div>
+                                <div><MessageFilled /></div>
+                                <div><BellFilled /></div>
+                                <div><DropboxOutlined /></div>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
                 <div className="outerHead">
                     <div className="head">
                         <div className="coverImg" >
@@ -139,25 +175,26 @@ class User extends Component {
                                     {this.state.request_from === this.state.my_id && <button>Requested</button>}
                                 </div>}
                             {this.state.status === 'friend' && <button>Friends</button>}
+                            <button onClick={this.getPosts}>Get posts</button>
                         </div>
                     </div>
                 </div>
                 <div className="content">
                     <div className="contentPage">
                         <div className="contentLeft">
-                            <div className="about">
-                                <h4>About</h4>
-                            </div>
-                            <div className="about">
+                        <div className="about">
                                 <h4>Friends</h4>
                                 <div className="friendDiv">
                                     {this.state.friendInfo.map((el, indx) => {
                                         return <div key={indx + 1} onClick={() => this.goToProfile(el.username)}>
                                             <img src={el.profile_pic} className="friendsPics" />
-                                            <p style={{margin:0}}>{el.first_name}</p>
+                                            <p style={{ margin: 0 }}>{el.first_name}</p>
                                         </div>
                                     })}
                                 </div>
+                            </div>
+                            <div className="about">
+                                <h4>About</h4>
                             </div>
                             <div className="about"></div>
                             <div className="about"></div>
@@ -166,12 +203,24 @@ class User extends Component {
                             <div className="addPost">
                                 <div className="addPostTop">
                                     <img src={this.state.my_profile_pic} className="userlogo" />
-                                    <input type="text" placeholder="What's on your mind" />
+                                    <input type="text" placeholder="What's on your mind" value={this.state.postText} onChange={(e) => this.setState({ postText: e.target.value })} />
                                 </div>
                                 <div className="addPostBottom">
-                                    <input type="text" placeholder="Image url" />
+                                    <input type="text" placeholder="Image url" value={this.state.postImage} onChange={(e) => this.setState({ postImage: e.target.value })} />
+                                    <button style={{ border: 'none', fontSize: '10px', }} onClick={this.submitPost}>Submit</button>
                                 </div>
                             </div>
+
+                            {this.state.postInfo.map(el => {
+                                return <div className="posts">
+                                    <div className="posterInfo">
+                                        <img src={el.profile_pic} style={{ width: '30px', height: '30px', borderRadius: '50%' }} />
+                                        <p>{el.first_name} {el.last_name}</p>
+                                    </div>
+                                    <p>{el.text}</p>
+                                    <img src={el.picture} style={{ width: '60%', height: '60%' }} />
+                                </div>
+                            })}
                         </div>
                     </div>
                 </div>

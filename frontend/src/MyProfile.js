@@ -47,36 +47,38 @@ class MyProfile extends Component {
         window.location.replace('user/' + this.state.searchFriends)
     }
     goToProfile = (username) => {
-        window.location.replace('/user/'+username)
+        window.location.replace('/user/' + username)
     }
     render() {
         return (
             <div className="profileWrapper">
-                <nav>
-                    <div className="logoSearch">
-                        <div className="logoBackground">f</div>
-                        <input type="text" placeholder="Search Friends" onChange={(e) => this.setState({ searchFriends: e.target.value })} />
-                        <button style={{ border: 'none', padding: '10px' }} onClick={this.findProfile}>Ok</button>
-                    </div>
-                    <div className="centerIcons">
-                        <HeartFilled />
-                        <ShoppingFilled />
-                        <UserOutlined />
-                        <HomeFilled />
-                    </div>
-                    <div className="rightBar">
-                        <div className="userInfo">
-                            <img src={this.state.profile_pic} className="userlogo" />
-                            <div>{this.state.first_name}</div>
+                <div className="navWrapper">
+                    <nav>
+                        <div className="logoSearch">
+                            <div className="logoBackground">f</div>
+                            <input type="text" placeholder="Search Friends" onChange={(e) => this.setState({ searchFriends: e.target.value })} />
+                            <button style={{ border: 'none', padding: '10px' }} onClick={this.findProfile}>Ok</button>
                         </div>
-                        <div className="rightIcons">
-                            <div><PlusOutlined /></div>
-                            <div><MessageFilled /></div>
-                            <div><BellFilled /></div>
-                            <div><DropboxOutlined /></div>
+                        <div className="centerIcons">
+                            <HeartFilled />
+                            <ShoppingFilled />
+                            <UserOutlined />
+                            <HomeFilled />
                         </div>
-                    </div>
-                </nav>
+                        <div className="rightBar">
+                            <div className="userInfo">
+                                <img src={this.state.profile_pic} className="userlogo" />
+                                <div>{this.state.first_name}</div>
+                            </div>
+                            <div className="rightIcons">
+                                <div><PlusOutlined /></div>
+                                <div><MessageFilled /></div>
+                                <div><BellFilled /></div>
+                                <div><DropboxOutlined /></div>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
                 <div className="outerHead">
                     <div className="head">
                         <div className="coverImg" >
@@ -105,18 +107,18 @@ class MyProfile extends Component {
                     <div className="contentPage">
                         <div className="contentLeft">
                             <div className="about">
-                                <h4>About</h4>
-                            </div>
-                            <div className="about">
                                 <h4>Friends</h4>
                                 <div className="friendDiv">
                                     {this.state.friendInfo.map((el, indx) => {
                                         return <div key={indx + 1} onClick={() => this.goToProfile(el.username)}>
                                             <img src={el.profile_pic} className="friendsPics" />
-                                            <p style={{margin:0}}>{el.first_name}</p>
+                                            <p style={{ margin: 0 }}>{el.first_name}</p>
                                         </div>
                                     })}
                                 </div>
+                            </div>
+                            <div className="about">
+                                <h4>About</h4>
                             </div>
                             <div className="about"></div>
                             <div className="about"></div>

@@ -6,6 +6,7 @@ module.exports = (sequelize,DataTypes) => {
         picture:{
             type:DataTypes.STRING
         }
+        
     })
     Post.associate = models => {
         Post.hasMany(models.comment, {foreignKey:"post_id"})

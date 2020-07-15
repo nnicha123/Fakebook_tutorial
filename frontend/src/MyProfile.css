@@ -18,13 +18,17 @@
     font-size: 25px;
     margin-right: 10px;
 }
+.navWrapper{
+    background-color: white;
+    width: 100%;
+}
 nav{
     height: 60px;
     display:flex;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
-    padding: 0 30px;
+    /* width: 100vw; */
+    padding: 0 10px;
     /* background-color: rgb(197, 196, 196); */
     box-shadow: 0 1px 5px rgba(0,0,0,0.3);
     background: white;
@@ -99,7 +103,7 @@ nav{
     border-radius: 50%;
     border: 5px solid white;
     position: absolute;
-    bottom: 200px;
+    bottom: 220px;
     left: 550px;
 }
 
@@ -122,16 +126,26 @@ nav{
     box-shadow: 0 1px 1px rgba(0,0,0,0.3);
     padding: 10px;
 }
-.contentRight{
+/* .contentRight{
     display: grid;
     grid-template-columns: repeat(1,1fr);
     margin-top: 10px;
-}
+} */
 .contentRight .addPost{
     height: 130px;
     margin: 10px;
+    margin-top: 20px;
     border-radius: 10px;
     background-color: white;
+}
+.contentRight .posts{
+    height: 300px;
+    margin: 20px 10px;
+    border-radius: 10px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 20px;
 }
 .addPostTop{
     padding: 20px;
@@ -172,7 +186,7 @@ nav{
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
+    /* position: relative; */
     width: 100%;
     border-top: 1px solid rgb(196, 196, 196);
 }
@@ -200,4 +214,11 @@ nav{
 }
 .friendDiv .friendsPics{
     width: 100%;
+}
+.posterInfo{
+    display:flex;
+    align-items: center;
+}
+.posterInfo img{
+    margin-right: 10px;
 }
